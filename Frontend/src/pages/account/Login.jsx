@@ -1,25 +1,29 @@
-import { LockOutlined, Password } from "@mui/icons-material";
+import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import requests from "../api/apiClient";
+import requests from "../../api/apiClient";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setUser } from "./accountSlice";
 
-export default function RegisterPage() {
-  const navigate = useNavigate(); 
-
+export default function LoginPage() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { register, handleSubmit, formState: {errors, isValid},  } = useForm({
     defaultValues:{
       username: "",
-      email:"",
       password: ""
     }
   });
 
+
   const handleForm = (data) => {
-    requests.account.register(data)
-      .then((result) => {
-        console.log(result);
-        navigate("/login")
+    requests.account.login(data)
+      .then((user) => {
+        console.log(user)
+        localStorage.setItem("user", JSON.stringify(user));
+        dispatch(setUser(user))
+        navigate("/products")
       })
       .catch((error) => console.log(error))
   }
@@ -31,7 +35,7 @@ export default function RegisterPage() {
           <LockOutlined/>
         </Avatar>
         <Typography component="h1" variant="h5" sx={{textAlign:"center" , mb:2}}>
-          Register
+          Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit(handleForm)} sx={{mb:2}}>
           <TextField 
@@ -50,23 +54,6 @@ export default function RegisterPage() {
             error={!!errors.username}
             helperText= {errors.username?.message}
           />
-
-          <TextField 
-            {...register("email", {
-              required: "Email alanı zorunludur.",
-              minLength: {
-                value: 10,
-                message: "Email en az 10 karakter olmalıdır."
-              },
-            })}
-            label="Enter email" 
-            size="small" 
-            fullWidth   
-            sx={{mb:2}}
-            error={!!errors.email}
-            helperText= {errors.email?.message}
-          />
-
           <TextField 
             {...register("password", {
               required: "Password alanı zorunludur.",
@@ -84,7 +71,7 @@ export default function RegisterPage() {
             helperText= {errors.password?.message}
           />
 
-          <Button type="submit" variant="contained" color="secondary" fullWidth sx={{mt:1}} disabled={!isValid}>Sign up</Button>
+          <Button type="submit" variant="contained" color="secondary" fullWidth sx={{mt:1}} disabled={!isValid}>Sign in</Button>
           
         </Box>
       </Paper>
