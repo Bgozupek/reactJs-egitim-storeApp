@@ -3,10 +3,12 @@ import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@m
 import { useForm } from "react-hook-form";
 import requests from "../../api/apiClient";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "./accountSlice";
 
 export default function RegisterPage() {
-  const navigate = useNavigate(); 
-
+  const dispatch = useDispatch()
+  const { status } = useSelector((state) => state.account)
   const { register, handleSubmit, formState: {errors, isValid},  } = useForm({
     defaultValues:{
       username: "",
@@ -16,12 +18,7 @@ export default function RegisterPage() {
   });
 
   const handleForm = (data) => {
-    requests.account.register(data)
-      .then((result) => {
-        console.log(result);
-        navigate("/login")
-      })
-      .catch((error) => console.log(error))
+    dispatch(registerUser(data))
   }
 
   return (
@@ -84,10 +81,12 @@ export default function RegisterPage() {
             helperText= {errors.password?.message}
           />
 
-          <Button type="submit" variant="contained" color="secondary" fullWidth sx={{mt:1}} disabled={!isValid}>Sign up</Button>
+           <Button type="submit" variant="contained" color="secondary" fullWidth sx={{mt:1}} disabled={!isValid}>
+                      {status === "pending" ? ( <CircularProgress size="25px"/> ) : ( "Sign up")}
+                    </Button>
           
         </Box>
       </Paper>
     </Container>
   );
-}
+} 

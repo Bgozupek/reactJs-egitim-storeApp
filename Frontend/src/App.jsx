@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import MainLayout from "./layouts/Main";
 import HomePage from "./pages/Home";
+import MainLayout from "./layouts/Main";
 import ProductsPage from "./pages/Products";
 import CartPage from "./pages/cart/Cart";
 import LoginPage from "./pages/account/Login";
@@ -9,11 +9,12 @@ import ProductDetailsPage from "./pages/ProductDetails";
 import ErrorPage from "./pages/errors/Error";
 import ServerErrorPage from "./pages/errors/ServerError";
 import NotFoundPage from "./pages/errors/NotFound";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import requests from "./api/apiClient";
 import { useDispatch } from "react-redux";
-import { setCart } from "./pages/cart/cartSlice";
-import { logout, setUser } from "./pages/account/accountSlice";
+import { getCart, setCart } from "./pages/cart/cartSlice";
+import { getUser, logout, setUser } from "./pages/account/accountSlice";
+import Loading from "./components/Loading";
 
 export const router = createBrowserRouter([
   {
@@ -46,23 +47,19 @@ export const router = createBrowserRouter([
 ]);
 
 function App() {
-  
+  const [loading, setLoading] = useState(true)
   const dispatch = useDispatch()
-  dispatch(setUser(JSON.parse(localStorage.getItem("user"))))
-
-  requests.account.getUser()
-    .then((user) => {setUser(user)
-      localStorage.setItem("user", JSON.stringify(user))
-    })
-    .catch((error) =>{ console.log(error)
-      dispatch(logout())
-    })
-
+  
+  const initApp = async () => {
+    await dispatch(getUser())
+    await dispatch(getCart())
+  }
+  
   useEffect(() => {
-    requests.cart.get()
-      .then((cart) => dispatch(setCart(cart)))
-      .catch((error) => console.log(error))
-  },[])
+    initApp().then(() => setLoading(false))
+  }, [])
+
+  if( loading ) return <Loading message="Sayfa Yükleniyor..."/> 
 
   return <RouterProvider router={router} />;
 }
