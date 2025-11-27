@@ -87,8 +87,8 @@ const cart = {
 }
 
 const account = {
-  login: (formData) => methods.post("users/login", formData),
-  register: (formData) => methods.post("users/register", formData),
+  loginUser: (formData) => methods.post("users/login", formData),
+  registerUser: (formData) => methods.post("users/register", formData),
   getUser: () => methods.get("users/getUser")
 }
 

@@ -13,11 +13,10 @@ export const loginUser = createAsyncThunk(
         try{
             const user = await requests.account.loginUser(data);
             localStorage.setItem("user", JSON.stringify(user));
-            router.navigate("/products")
             return user
         }
         catch (error){
-            return thunkAPI.rejectWithValue({message})
+            return thunkAPI.rejectWithValue({message: error.message})
         }
     }   
 )
@@ -30,7 +29,7 @@ export const registerUser = createAsyncThunk(
             router.navigate("/login")
         }
         catch (error){
-            return thunkAPI.rejectWithValue({message})
+            return thunkAPI.rejectWithValue({message: error.message})
         }
     }   
 )
@@ -45,7 +44,7 @@ export const getUser = createAsyncThunk(
             return user 
         }
         catch (error){
-            return thunkAPI.rejectWithValue({message})
+            return thunkAPI.rejectWithValue({message: error.message})
             
         }
     },{
@@ -76,6 +75,7 @@ export const accountSlice = createSlice({
         builder.addCase(loginUser.fulfilled, (state, action) => {
             state.user = action.payload
             state.status = "idle"
+            router.navigate("/products")
 
         })
         builder.addCase(loginUser.rejected, (state) => {
