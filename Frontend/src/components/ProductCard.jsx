@@ -24,7 +24,7 @@ export default function ProductCard({ product }) {
     <Card>
       <CardActionArea component={Link} to={"/products/" + product.id}>
         <CardMedia
-          sx={{ height: 160, backgroundSize: "contain" }}
+          sx={{ height: 160, backgroundSize: "contain", margin:1 }}
           image={`http://localhost:5000/images/${product.image}`}
         />
         <CardContent>

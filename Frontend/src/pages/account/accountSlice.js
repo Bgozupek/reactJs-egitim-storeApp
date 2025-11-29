@@ -36,7 +36,7 @@ export const registerUser = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
     "account/getUser",
-    async (thunkAPI) => {
+    async (_, thunkAPI) => {
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user"))))
         try{
             const user = await requests.account.getUser();
@@ -50,6 +50,7 @@ export const getUser = createAsyncThunk(
     },{
         condition: () => {
             if(!localStorage.getItem("user")) return false;
+            return true;
         }
     }  
 )
