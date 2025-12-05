@@ -1,9 +1,11 @@
-import { AppBar, Badge, Box, Button, IconButton, Toolbar } from "@mui/material";
+import { AppBar, Badge, Box, Button, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { Link, NavLink } from "react-router";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../pages/account/accountSlice";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { useState } from "react";
 
 const links = [
   { title: "Home", to: "/" },
@@ -21,7 +23,19 @@ export default function Navbar() {
   const { user } = useSelector((state) => state.account);
   const dispatch = useDispatch();
   const itemCount = cart?.cartItems.reduce((total, item) => total + item.product.quantity,0);
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+
+  function handleClick(e){
+    setAnchorEl(e.currentTarget)
+  }
+
+  function handleClose(){
+    setAnchorEl(null)
+  }
   
+
   return (
     <AppBar position="static" sx={{ backgroundColor: "secondary.light" }}>
       <Toolbar>
@@ -55,8 +69,25 @@ export default function Navbar() {
           </IconButton>
           {user ? (
               <>
-                <Button color="inherit" sx={{mr:2}}>{user.username}</Button>
-                <Button color="inherit" onClick={() => dispatch(logout())}>Loguot</Button>
+                <Button id="user-button" onClick={handleClick} endIcon={<KeyboardArrowDown/>} color="inherit" sx={{mr:2}}>{user.username}</Button>
+                <Menu id="user-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose()
+                    }}
+                    component={Link} 
+                    to="/orders"
+                  >
+                    Siparişlerim
+                  </MenuItem>
+                  <MenuItem 
+                    onClick={() => {
+                      dispatch(logout());
+                      handleClose()
+                    }}>
+                      Çıkış
+                    </MenuItem>  
+                </Menu>
               </>
             ):(
               <>

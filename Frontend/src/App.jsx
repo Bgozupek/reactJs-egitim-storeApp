@@ -16,6 +16,7 @@ import { getUser } from "./pages/account/accountSlice";
 import Loading from "./components/Loading";
 import CheckoutPage from "./pages/checkout/checkout";
 import AuthGuard from "./Auth/AuthGuard";
+import OrdersPage from "./pages/orders/Orders";
 
 
 export const router = createBrowserRouter([
@@ -37,7 +38,10 @@ export const router = createBrowserRouter([
       { path: "register", element: <RegisterPage /> },
       {
         element: <AuthGuard/>, 
-        children:[{path: "checkout", element: <CheckoutPage/>}]
+        children:[
+          {path: "checkout", element: <CheckoutPage/>},
+          {path: "orders", element: <OrdersPage/>}
+        ]
       }, 
       {
         path: "errors",

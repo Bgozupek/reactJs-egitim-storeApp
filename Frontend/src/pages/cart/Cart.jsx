@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -20,7 +20,7 @@ export default function CartPage() {
   const subTotal = total - tax;
 
     if(!cart || !cart.cartItems || cart.cartItems.length === 0)
-      return <Typography component="h4">Sepetinizde ürün yok</Typography>
+      return <Alert severity="warning">Sepetinizde ürün yok</Alert>
 
   return (
     <>
