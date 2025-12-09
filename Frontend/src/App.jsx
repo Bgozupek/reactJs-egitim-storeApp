@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { getCart } from "./pages/cart/cartSlice";
 import { getUser } from "./pages/account/accountSlice";
 import Loading from "./components/Loading";
-import CheckoutPage from "./pages/checkout/checkout";
+import CheckoutPage from "./pages/checkout/Checkout";
 import AuthGuard from "./Auth/AuthGuard";
 import OrdersPage from "./pages/orders/Orders";
 
